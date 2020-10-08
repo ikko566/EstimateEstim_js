@@ -1,0 +1,841 @@
+<!DOCTYPE html lang=ja>
+<html  xmlns="http://www.w3.org/1999/xhtml"  >
+<head>
+  <title>TW シリーズ 試算見積り</title>
+  <style> p { margin:5px; } </style>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <style>
+div {
+	display: inline-block;
+	_display: inline;
+}
+<style type="text/css">
+<!--
+.pop2 a:hover{
+	position:relative;
+}
+
+.fukidasipop2 {
+	position: absolute;
+	top:17px; left:20px;
+	display:none;
+	padding:5px;
+	width : 330px;
+   font-weight : bold;
+  	height:100%;
+	color:#ffffff;
+	background-color: #b22222;
+	text-decoration:none;
+        border-top:white solid 10px;
+	border-left:#b22222 solid 10px;
+        filter: alpha(opacity=85);
+-moz-opacity:0.85;
+  opacity:0.85;
+}
+a:hover .fukidasipop2 {
+	position:relative;
+	top:0px; left:0px;
+	height:100%;
+	display: block;z-index:1;
+	visibility:visible;
+}
+
+a{position:relative;}
+a span{
+	position:absolute;
+	top:-55px;
+	left:0px;
+	width:400px;
+	padding:5px;
+	visibility:hidden;
+	background:#f5f5f5;
+	border:2px solid #999;
+	font-size:100%;
+	color:#333;
+	}
+a:hover{visibility:visible}
+a:hover span{visibility:visible;}
+-->
+</style>
+
+
+</style>
+<!-- tooltip -->
+<!-- <script src="js/jquery-1.2.6.min.js" type="text/javascript" charset="utf-8"></script> -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script> 
+
+</head><body>
+
+  <h1>TW 試算見積り</h1>
+
+
+<p> TODO </p>
+<ul>
+<li> ※もともとのxlsに間違いがある? GPU価格 K6000
+<li> 台数が多い場合の値引きは入れていない（別途見積り？）
+</ul>
+
+
+
+<div id="cpuoptionT" style="display:none"> ここに表示:  </div>  </br>
+
+<table>
+<tr>
+<th width="150"> 内容 </th>
+<th width="100"> 選択 </th>
+<th width="50"> 個数 </th>
+<th width="520"> 内容 </th>
+<th width="170"> 定価 (単価）</th>
+<!--
+<th> 説明 </th>
+-->
+<!-- CPU -->
+</tr>
+<tr>
+<td>
+CPUのタイプ
+</td>
+<td>
+<div id="cpuoption"></div>
+</td>
+<td>
+<select name="num" id="num" onchange="calcCart()">
+<option value=1 selected>1</option>
+<option value=2>         2</option>
+<option value=3>         3</option>
+<option value=4>         4</option>
+</select>
+</td>
+<td>
+<!-- <a href="リンク先URL" class="tooltip" title="ツールチップの内容">タイトル</a> -->
+<!-- <a href="url"         class="tooltip" title="説明がここに表示される"> </a> -->
+
+<!-- <a href="javascript:void(0);" target="_blank" style="font-size : 1em;font-weight : bold;color : blue" >  -->
+
+<!-- Popup sample -->
+<!--
+<div id="pulldown1">
+<a href="#"> 
+<p id="cpudescription[0]" >
+<span><strong><p id="cputype[0]"></p></strong><br /><p id="cpupopup[0]"></p></span>
+</p>
+</a>
+ </div>
+
+<div id="pulldown2" style="display:none" > 
+<a href="#"> 
+<p id="cpudescription[1]" >
+<span><strong><p id="cputype[0]"></p></strong><br /><p id="cpupopup[1]"></p></span>
+</p> 
+</a>
+</div>
+-->
+<!-- original -->
+<!--
+<p class="popup01"><a href="#">オリジナルここにマウスを乗せるとポコっと。<span><strong>サンプル１</strong><br />spanでマークアップされたテキストが出てきます。</span></a>
+</p>
+-->
+<!-- １つのファイルを表示 -->
+
+<a href="#" style="text-decoration: none" > 
+<div id="pulldown1">                       <p id="cpudescription[0]" ></p> </div>
+<div id="pulldown2" style="display:none" > <p id="cpudescription[1]" ></p> </div>
+<!--
+<span><strong>タイプの説明</strong><br /> <iframe src="cputype.txt" width="400px" frameborder="0"></iframe></span>
+-->
+<span><strong>タイプの説明</strong><br /> <p id="cpupop"></p></span>
+</a>
+
+<!-- Pop up なし版 -->
+<!--
+<div id="pulldown1">                       <p id="cpudescription[0]"></p> </div>
+<div id="pulldown2" style="display:none" > <p id="cpudescription[1]"></p> </div>
+-->
+
+
+</td>
+<td>
+<div id="price1">                       <p id="cpuprice[0]"></p> </div>
+<div id="price2" style="display:none" > <p id="cpuprice[1]"></p> </div>
+</td>
+<td>
+<div id="cpumaint[0]" style="display:none"></div>
+<div id="cpumaint[1]" style="display:none"></div>
+<div id="cpupopup[0]" style="display:none"></div>
+<div id="cpupopup[1]" style="display:none"></div>
+<!--
+<input type="button" value="説明" onclick="typedescription()" />
+-->
+</td>
+
+</tr>
+<!--- CPU END -->
+
+
+<tr>
+<td>
+メモリのタイプ
+</td>
+<td>
+<div id="memoption"></div>
+</td>
+<td>
+</td>
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="mem1">                       <p id="memdescription[0]"></p> </div>
+<div id="mem2" style="display:none" > <p id="memdescription[1]"></p> </div>
+<div id="mem3" style="display:none" > <p id="memdescription[2]"></p> </div>
+<span><strong>メモリの説明</strong><br /> <p id="mempop"></p></span>
+</a>
+</td>
+
+<td>
+<div id="memprice1">                       <p id="memprice[0]"></p> </div>
+<div id="memprice2" style="display:none" > <p id="memprice[1]"></p> </div>
+<div id="memprice3" style="display:none" > <p id="memprice[2]"></p> </div>
+</td>
+<td>
+<div id="memmaint[0]" style="display:none"></div>
+<div id="memmaint[1]" style="display:none"></div>
+<div id="memmaint[2]" style="display:none"></div>
+</td>
+</tr>
+
+<tr>
+<td>
+グラフィックボード
+</td>
+<td>
+<div id="gpuoption"></div>
+</td>
+<td>
+</td>
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="gpu1">                       <p id="gpudescription[0]"></p> </div>
+<div id="gpu2" style="display:none" > <p id="gpudescription[1]"></p> </div>
+<div id="gpu3" style="display:none" > <p id="gpudescription[2]"></p> </div>
+<div id="gpu4" style="display:none" > <p id="gpudescription[3]"></p> </div>
+<div id="gpu5" style="display:none" > <p id="gpudescription[4]"></p> </div>
+<div id="gpu6" style="display:none" > <p id="gpudescription[5]"></p> </div>
+<div id="gpu7" style="display:none" > <p id="gpudescription[6]"></p> </div>
+<div id="gpu8" style="display:none" > <p id="gpudescription[7]"></p> </div>
+<div id="gpu9" style="display:none" > <p id="gpudescription[8]"></p> </div>
+<span><strong>グラフィックボードの説明</strong><br /> <p id="gpupop"></p></span>
+</a>
+</td>
+<td>
+<div id="gpuprice1">                       <p id="gpuprice[0]"></p> </div>
+<div id="gpuprice2" style="display:none" > <p id="gpuprice[1]"></p> </div>
+<div id="gpuprice3" style="display:none" > <p id="gpuprice[2]"></p> </div>
+<div id="gpuprice4" style="display:none" > <p id="gpuprice[3]"></p> </div>
+<div id="gpuprice5" style="display:none" > <p id="gpuprice[4]"></p> </div>
+<div id="gpuprice6" style="display:none" > <p id="gpuprice[5]"></p> </div>
+<div id="gpuprice7" style="display:none" > <p id="gpuprice[6]"></p> </div>
+<div id="gpuprice8" style="display:none" > <p id="gpuprice[7]"></p> </div>
+<div id="gpuprice9" style="display:none" > <p id="gpuprice[8]"></p> </div>
+</td>
+<td>
+<div id="gpumaint[0]" style="display:none"></div>
+<div id="gpumaint[1]" style="display:none"></div>
+<div id="gpumaint[2]" style="display:none"></div>
+<div id="gpumaint[3]" style="display:none"></div>
+<div id="gpumaint[4]" style="display:none"></div>
+<div id="gpumaint[5]" style="display:none"></div>
+<div id="gpumaint[6]" style="display:none"></div>
+<div id="gpumaint[7]" style="display:none"></div>
+<div id="gpumaint[8]" style="display:none"></div>
+<div id="gpumaint[9]" style="display:none"></div>
+
+</td>
+</tr>
+<!-- disk -->
+<tr>
+<td>
+ディスクサイズ
+</td>
+<td>
+<div id="diskoption"></div>
+</td>
+<td>
+</td>
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="disk1">                       <p id="diskdescription[0]"></p> </div>
+<div id="disk2" style="display:none" > <p id="diskdescription[1]"></p> </div>
+<div id="disk3" style="display:none" > <p id="diskdescription[2]"></p> </div>
+<div id="disk4" style="display:none" > <p id="diskdescription[3]"></p> </div>
+<div id="disk5" style="display:none" > <p id="diskdescription[4]"></p> </div>
+<span><strong>ディスク構成の説明</strong><br /> <p id="diskpop"></p></span>
+</a>
+</td>
+
+<td>
+<div id="diskprice1">                       <p id="diskprice[0]"></p> </div>
+<div id="diskprice2" style="display:none" > <p id="diskprice[1]"></p> </div>
+<div id="diskprice3" style="display:none" > <p id="diskprice[2]"></p> </div>
+<div id="diskprice4" style="display:none" > <p id="diskprice[3]"></p> </div>
+<div id="diskprice5" style="display:none" > <p id="diskprice[4]"></p> </div>
+</td>
+<td>
+<div id="diskmaint[0]" style="display:none"></div>
+<div id="diskmaint[1]" style="display:none"></div>
+<div id="diskmaint[2]" style="display:none"></div>
+<div id="diskmaint[3]" style="display:none"></div>
+<div id="diskmaint[4]" style="display:none"></div>
+</td>
+</tr>
+<!-- drv -->
+<tr>
+<td>
+メディアドライブ
+</td>
+<td>
+<div id="drvoption"></div>
+</td>
+<td>
+</td>
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="drv1">                       <p id="drvdescription[0]"></p> </div>
+<div id="drv2" style="display:none" > <p id="drvdescription[1]"></p> </div>
+<span><strong>メディアドライブの説明</strong><br /> <p id="drvpop"></p></span>
+</a>
+</td>
+
+<td>
+<div id="drvprice1">                       <p id="drvprice[0]"></p> </div>
+<div id="drvprice2" style="display:none" > <p id="drvprice[1]"></p> </div>
+</td>
+<td>
+<div id="drvmaint[0]" style="display:none"></div>
+<div id="drvmaint[1]" style="display:none"></div>
+</td>
+</tr>
+<!-- os -->
+<tr>
+<td>
+OS
+</td>
+<td>
+<div id="osoption"></div>
+</td>
+<td>
+</td>
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="os1">                       <p id="osdescription[0]"></p> </div>
+<span><strong>Windows OS説明</strong><br /> <p id="ospop"></p></span>
+</a>
+</td>
+
+<td>
+<div id="osprice1">                       <p id="osprice[0]"></p> </div>
+</td>
+<td>
+<div id="osmaint[0]" style="display:none"></div>
+</td>
+</tr>
+
+<!-- office -->
+<tr>
+<td>
+マイクロソフトオフィス
+</td>
+<td>
+<div id="officeoption"></div>
+</td>
+<td>
+</td>
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="office1">                       <p id="officedescription[0]"></p> </div>
+<div id="office2" style="display:none" > <p id="officedescription[1]"></p> </div>
+<span><strong>マイクロソフト オフィス</strong><br /> <p id="officepop"></p></span>
+</a>
+</td>
+
+<td>
+<div id="officeprice1">                       <p id="officeprice[0]"></p> </div>
+<div id="officeprice2" style="display:none" > <p id="officeprice[1]"></p> </div>
+</td>
+<td>
+<div id="officemaint[0]" style="display:none"></div>
+<div id="officemaint[1]" style="display:none"></div>
+</td>
+</tr>
+
+<!-- KB/M -->
+<tr>
+<td>
+キーボードとマウス
+</td>
+<td>
+<div id="kbmoption"></div>
+</td>
+<td>
+</td>
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="kbm1">                       <p id="kbmdescription[0]"></p> </div>
+<div id="kbm2" style="display:none" > <p id="kbmdescription[1]"></p> </div>
+<div id="kbm3" style="display:none" > <p id="kbmdescription[2]"></p> </div>
+<span><strong>キーボードとマウス</strong><br /> <p id="kbmpop"></p></span>
+</a>
+</td>
+
+<td>
+<div id="kbmprice1">                       <p id="kbmprice[0]"></p> </div>
+<div id="kbmprice2" style="display:none" > <p id="kbmprice[1]"></p> </div>
+<div id="kbmprice3" style="display:none" > <p id="kbmprice[2]"></p> </div>
+</td>
+<td>
+<div id="kbmmaint[0]" style="display:none"></div>
+<div id="kbmmaint[1]" style="display:none"></div>
+<div id="kbmmaint[2]" style="display:none"></div>
+
+</td>
+</tr>
+
+<!-- job -->
+<tr>
+<td>
+ジョブ管理ソフト
+</td>
+<td>
+<div id="joboption"></div>
+</td>
+
+
+<td>
+<!--
+<script type="text/javascript">
+alert(job1);
+</script>
+-->
+<div id="job1">                       </div>
+<div id="job2" style="display:none" > <p id="core"></p> </div>
+</td>
+
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="jobd1">                       <p id="jobdescription[0]"></p> </div>
+<div id="jobd2" style="display:none" > <p id="jobdescription[1]"></p> </div>
+<span><strong>ジョブ管理システムの説明</strong><br /> <p id="jobpop"></p></span>
+</a>
+</td>
+
+
+<td>
+<div id="jobprice1">                       <p id="jobprice[0]"></p></div> 
+<div id="jobprice2" style="display:none" > <p id="jobprice[1]"></p></div> 
+</td>
+<td>
+<div id="jobmaint[0]" style="display:none"></div>
+<div id="jobmaint[1]" style="display:none"></div>
+</td>
+</tr>
+
+<!-- モニタ1 -->
+<tr>
+<td>
+モニタ1
+</td>
+<td>
+<div id="mon1option"></div>
+</td>
+<td>
+</td>
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="mon11">                       <p id="mon1description[0]"></p> </div>
+<div id="mon12" style="display:none" > <p id="mon1description[1]"></p> </div>
+<div id="mon13" style="display:none" > <p id="mon1description[2]"></p> </div>
+<div id="mon14" style="display:none" > <p id="mon1description[3]"></p> </div>
+<div id="mon15" style="display:none" > <p id="mon1description[4]"></p> </div>
+<div id="mon16" style="display:none" > <p id="mon1description[5]"></p> </div>
+<div id="mon17" style="display:none" > <p id="mon1description[6]"></p> </div>
+<span><strong>メイン モニタの説明</strong><br /> <p id="mon1pop"></p></span>
+</a>
+</td>
+
+<td>
+<div id="mon1price1">                       <p id="mon1price[0]"></p> </div>
+<div id="mon1price2" style="display:none" > <p id="mon1price[1]"></p> </div>
+<div id="mon1price3" style="display:none" > <p id="mon1price[2]"></p> </div>
+<div id="mon1price4" style="display:none" > <p id="mon1price[3]"></p> </div>
+<div id="mon1price5" style="display:none" > <p id="mon1price[4]"></p> </div>
+<div id="mon1price6" style="display:none" > <p id="mon1price[5]"></p> </div>
+<div id="mon1price7" style="display:none" > <p id="mon1price[6]"></p> </div>
+</td>
+<td>
+<div id="mon1maint[0]" style="display:none"></div>
+<div id="mon1maint[1]" style="display:none"></div>
+<div id="mon1maint[2]" style="display:none"></div>
+<div id="mon1maint[3]" style="display:none"></div>
+<div id="mon1maint[4]" style="display:none"></div>
+<div id="mon1maint[5]" style="display:none"></div>
+<div id="mon1maint[6]" style="display:none"></div>
+</td>
+</tr>
+
+<tr>
+<td>
+モニタ2 (追加）
+</td>
+<td>
+<div id="mon2option"></div>
+</td>
+<td>
+</td>
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="mon21">                       <p id="mon2description[0]"></p> </div>
+<div id="mon22" style="display:none" > <p id="mon2description[1]"></p> </div>
+<div id="mon23" style="display:none" > <p id="mon2description[2]"></p> </div>
+<div id="mon24" style="display:none" > <p id="mon2description[3]"></p> </div>
+<div id="mon25" style="display:none" > <p id="mon2description[4]"></p> </div>
+<div id="mon26" style="display:none" > <p id="mon2description[5]"></p> </div>
+<div id="mon27" style="display:none" > <p id="mon2description[6]"></p> </div>
+<span><strong>サブ モニタの説明</strong><br /> <p id="mon2pop"></p></span>
+</a>
+</td>
+
+<td>
+<div id="mon2price1">                       <p id="mon2price[0]"></p> </div>
+<div id="mon2price2" style="display:none" > <p id="mon2price[1]"></p> </div>
+<div id="mon2price3" style="display:none" > <p id="mon2price[2]"></p> </div>
+<div id="mon2price4" style="display:none" > <p id="mon2price[3]"></p> </div>
+<div id="mon2price5" style="display:none" > <p id="mon2price[4]"></p> </div>
+<div id="mon2price6" style="display:none" > <p id="mon2price[5]"></p> </div>
+<div id="mon2price7" style="display:none" > <p id="mon2price[6]"></p> </div>
+</td>
+<td>
+<div id="mon2maint[0]" style="display:none"></div>
+<div id="mon2maint[1]" style="display:none"></div>
+<div id="mon2maint[2]" style="display:none"></div>
+<div id="mon2maint[3]" style="display:none"></div>
+<div id="mon2maint[4]" style="display:none"></div>
+<div id="mon2maint[5]" style="display:none"></div>
+<div id="mon2maint[6]" style="display:none"></div>
+</td>
+</tr>
+
+<!-- スタンド -->
+<tr>
+<td>
+スタンド？
+</td>
+<td>
+<div id="stndoption"></div>
+</td>
+<td>
+</td>
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="stnd1">                       <p id="stnddescription[0]"></p> </div>
+<div id="stnd2" style="display:none" > <p id="stnddescription[1]"></p> </div>
+<div id="stnd3" style="display:none" > <p id="stnddescription[2]"></p> </div>
+<span><strong>スタンドの説明</strong><br /> <p id="stndpop"></p></span>
+</a>
+</td>
+
+<td>
+<div id="stndprice1">                       <p id="stndprice[0]"></p> </div>
+<div id="stndprice2" style="display:none" > <p id="stndprice[1]"></p> </div>
+<div id="stndprice3" style="display:none" > <p id="stndprice[2]"></p> </div>
+
+</td>
+<td>
+<div id="stndmaint[0]" style="display:none"></div>
+<div id="stndmaint[1]" style="display:none"></div>
+<div id="stndmaint[2]" style="display:none"></div>
+
+</td>
+</tr>
+
+
+<!-- UPS -->
+<tr>
+<td>
+UPS
+</td>
+<td>
+<div id="upsoption"></div>
+</td>
+<td>
+</td>
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="ups1">                       <p id="upsdescription[0]"></p> </div>
+<div id="ups2" style="display:none" > <p id="upsdescription[1]"></p> </div>
+<span><strong>UPSの説明</strong><br /> <p id="upspop"></p></span>
+</a>
+</td>
+
+<td>
+<div id="upsprice1">                       <p id="upsprice[0]"></p> </div>
+<div id="upsprice2" style="display:none" > <p id="upsprice[1]"></p> </div>
+</td>
+<td>
+<div id="upsmaint[0]" style="display:none"></div>
+<div id="upsmaint[1]" style="display:none"></div>
+
+</td>
+</tr>
+
+
+<!-- 保守 -->
+<tr>
+<td>
+保守
+</td>
+<td>
+<div id="mantoption"></div>
+</td>
+<td>
+<select name="year" id="year" onchange="calcCart()">
+<option value=1>1年</option>
+<option value=2>2年</option>
+<option value=3 selected>3年</option>
+</select>
+</td>
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="mant1">                       <p id="mantdescription[0]"></p> </div>
+<div id="mant2" style="display:none" > <p id="mantdescription[1]"></p> </div>
+<div id="mant3" style="display:none" > <p id="mantdescription[2]"></p> </div>
+<span><strong>保守の説明</strong><br /> <p id="mantpop"></p></span>
+</a>
+</td>
+<td>
+<!--
+<div id="mantprice1">                       <p id="mantprice[0]"></p> </div>
+<div id="mantprice2" style="display:none" > <p id="mantprice[1]"></p> </div>
+<div id="mantprice3" style="display:none" > <p id="mantprice[2]"></p> </div>
+-->
+<!-- <p id="totalment" ></p> -->
+<div id="mantprice1">                       <p id="totalment[0]"></p> </div>
+<div id="mantprice2" style="display:none" > <p id="totalment[1]"></p> </div>
+<div id="mantprice3" style="display:none" > <p id="totalment[2]"></p> </div>
+</td>
+<td>
+<div id="mantmaint[0]" style="display:none"></div>
+<div id="mantmaint[1]" style="display:none"></div>
+<div id="mantmaint[2]" style="display:none"></div>
+<div id="mantprice[0]" style="display:none"></div>
+<div id="mantprice[1]" style="display:none"></div>
+<div id="mantprice[2]" style="display:none"></div>
+
+</td>
+</tr>
+
+<tr>
+<td>
+据付作業
+</td>
+<td>
+<div id="setupoption"></div>
+</td>
+<td>
+
+</td>
+<td>
+<a href="#" style="text-decoration: none" > 
+<div id="setup1">                       <p id="setupdescription[0]"></p> </div>
+<div id="setup2" style="display:none" > <p id="setupdescription[1]"></p> </div>
+<span><strong>据付作業の説明</strong><br /> <p id="setuppop"></p></span>
+</a>
+</td>
+<td>
+<div id="setupprice1">                       <p id="setupprice[0]"></p> </div>
+<div id="setupprice2" style="display:none" > <p id="setupprice[1]"></p> </div>
+</td>
+<td>
+<div id="setupmaint[0]" style="display:none"></div>
+<div id="setupmaint[1]" style="display:none"></div>
+
+</td>
+</tr>
+
+
+<tr bgcolor="#EE0000">
+<td>
+<font color="#FFFFFF">
+<strong>
+合計
+</strong>
+</font>
+</td>
+<td>
+<!--
+<font color="#FFFFFF">
+-->
+<!-- <input id="total" type="text"/>円 -->
+<!--
+<div id="total" ></div>円
+</font>
+-->
+</td>
+<td>
+</td>
+<td>
+<font color="#FFFFFF">
+<div id="totalmentn" style="display:none" ></div>
+<!-- <div id="totalmentn" style="display:none" ></div>円 --> 
+</font>
+</td>
+<td>
+<font color="#FFFFFF" size="+2" type="bold">
+<div id="total" ></div>円
+</td>
+</tr>
+</table>
+
+<!-- <p><button onclick="calcCart()">試算 見積り </button> -->
+
+<!-- </form> -->
+
+
+<hr>
+
+<FORM ACTION="cgi-bin/sendmail.cgi" METHOD="POST">
+  見積返信先 メイル アドレス <input type="text" name="email" size="50" /> <br />
+<!--  コメント -->
+<br /> 
+<textarea  name="MSG" cols="72" rows="5" > ここに連絡事項を記入してください
+客先名やソルバも記入してください。
+客先名：
+ソルバ：
+</textarea> <br />
+
+<!--  <input type="button" value="送信" onclick="window.close()" /> -->
+<!-- <input type="hidden" id="value" > -->
+</BR>
+<!--
+for IE8
+-->
+<textarea hidden="true" name="recipe" id="recipe" type="text" cols="50" rows="5"
+> </textarea> 
+<!-- 確認用 -->
+<!-- <textarea name="recipe" id="recipe" type="text" cols="100" rows="16"> </textarea> -->
+  <INPUT TYPE="submit" VALUE="この構成で詳細見積り"> <!-- <INPUT type="reset" value="リセット"> -->
+</form>
+
+
+問い合わせ先 <br/>
+koji.sakamoto[at]unisys.co.jp <br/>
+atsushi.aoki[at]unisys.co.jp <br/>
+
+
+<p> ------------------------------ </p> <br/>
+<p> こんなことできる<STRIKE>ともっといいかも</STRIKE> </p>
+<small>
+<ul>
+<li> 保守計算
+<hr>
+<li> ARDのサーバにおいて、販社からもアクセス -> 完了
+<li> csv から価格、PopUpコメントなどを読み込み -> 完了
+
+<li> ログインパスワード 
+<li> アクセス頻度がわかるようにするとセールス状況がわかるかも  -> 完了
+<li> 詳細見積り時には、客先名、ソルバ名などあるとよい？ -> 完了 自由記入欄
+<li>  <!-- <li> 説明ポップアップで グラフが出てきて効率差がわかる --> 客先で保険屋みたいにリアルタイムで見積り -> 完了 Padからアクセス可能
+<li> 既存マシンのおよそのスペック （クロック）を入れて、タイプ選択時に、他マシンとの効率差がわかるとよい たとえば3.0GHzといれると ×1.5とか？ 
+-->
+</ul>
+</small>
+
+<p> TODO </p>
+<ul>
+<li> ※もともとのxlsに間違いがあるので検算できない。据付費、GPU価格など
+<li> 台数が多い場合の値引きは入れていない（別途見積り？）
+</ul>
+<small>
+<ul>
+<li> Mail受信Spamメイル対策の申請中
+<li> Mr.AOKIに引き継ぎ
+<li> (やらなくてもよい？）Basic 認証
+<li> (やらなくてもよい？）PopUp見難い？
+<li> 変数の配列化(引き継ぎ時の宿題かな？これやれば中身理解できる）
+<li> ARDへのDeploy手順書いた方がよい？メモでいいよね。
+
+</ul>
+<p> Getting Thing Done (終わった作業）</p>
+<ul>
+<li> 合計を一番右へ　萩原指摘
+<li> 価格の , 区切り
+<li> 見積りー＞見積り　ARD平田要望
+<li> IE8 対応　価格が表示されない
+<li> Mail受信はSpam扱いされているので申請中　(2/16) -> 完了 (2/17)
+<li> メイルアドレスの入力チェック
+<li> メイル送信時の確認と戻るページ
+<li> ポップアップコメントの反映 入力
+<li> 保守の変更で数値がかわる
+<li> 保守説明
+<li> 据付 あり/なし オプション
+<li> トータル計算
+<li> xlsとの比較 OK
+<li> csv ファイル ポップアップコメント記入
+<li> 計算 検証
+<li> idタグがなぜか1回のみ有効
+<li> ARD のサーバへ引っ越し
+<li> アクセスカウンタ
+<li> Mail送付時の内容確認
+<li> ARDサーバでの文字コード修正 -> subjectを英数にした　　　　
+
+
+</ul>
+
+</small>
+
+
+<!--#include virtual="../cgi-bin/count.cgi" -->
+
+
+<!-- ( <script type="text/javascript" src="http:../cgi-bin/count.cgi"></script> ) -->
+<!-- <script type="text/javascript" src="../cgi-bin/week.js"></script> -->
+<!--週間カウンターＪａｖａｓｃｒｉｐｔデータとして読み出し-->
+<!--週間カウンターカウントアップ-->
+<!-- <img src="../cgi-bin/week.cgi" width=0 height=0>  </script>-->
+
+<p align="right">
+<script type="text/javascript" src="http:../cgi-bin/count.cgi"></script>
+</p>
+
+<!-- <script type="text/javascript" src="http:../cgi-bin/week.cgi"></script> -->
+
+<!--表の作成-->
+
+<!-- <script type="text/javascript"> -->
+<!--
+dy="s,m,t,w,t,f,s,t".split(",");
+today=new Date();
+tw=today.getDay();
+dd=cont.split(",");
+document.write('<table cellpadding=1 style="font-size=10;">\n<tr>');
+for(i=0;i<7;i++){
+j=(tw*1+i+1)%7
+document.write("<td align=center>"+dy[j]+"</td>");
+}
+document.write("<td align=center>"+dy[7]+"</td>");
+document.write("</tr>\n<tr>");
+for(i=0;i<7;i++){
+j=(tw*1+i+1)%7
+document.write("<td align=right>"+dd[j]+"</td>");
+}
+document.write("<td align=right>"+dd[7]+"</td>");
+
+document.write("</tr>\n</table>\n");
+//-->
+<!-- </script> -->
+
+
+<!--
+<script type="text/javascript" >
+function $F(id) { return parseFloat($(id).value); }
+</script> 
+-->
+<script type="text/javascript" src="trialcalc.js"></script> 
+</body></html>
